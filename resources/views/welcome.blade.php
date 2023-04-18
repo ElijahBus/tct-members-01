@@ -38,17 +38,31 @@
         <!-- List all schools -->
         <h3 class="tct-title-secondary">
             All Schools
-            <a href="#" class="mx-2 badge text-dark bg-info bg-opacity-25 border-dark rounded-3">Clear selection</a>
+
+            @if(isset($hasSelection))
+                <a href="{{ route('home') }}" class="mx-2 badge text-dark bg-info bg-opacity-25 border-dark rounded-3">Clear
+                    selection</a>
+            @endif
         </h3>
 
         <ul class="list-group list-group-flush mt-4 ">
-            <li class="list-group-item row" aria-current="true">
-                <span>TCT University</span>
-                <span class="badge bg-info bg-opacity-25 text-dark">{{"   "}}</span>
-            </li>
-            <li class="list-group-item">Cambridge School</li>
-            <li class="list-group-item">Inter College</li>
-            <li class="list-group-item">Young Foundation School</li>
+            @forelse($schools as $school)
+
+                @if(isset($selectedSchoolId) && $selectedSchoolId == $school->id)
+                    <a href="{{ route('members.by-school', $school->id) }}" class="list-group-item  row"
+                       aria-current="true">
+                        <span>{{ $school->name }}</span>
+                        <span class="badge bg-info bg-opacity-25 text-dark">{{"   "}}</span>
+                    </a>
+                @else
+                    <a href="{{ route('members.by-school', $school->id) }}" class="list-group-item" aria-current="true">
+                        <span>{{ $school->name }}</span>
+                    </a>
+                @endif
+
+            @empty
+                <li>No Schools</li>
+            @endforelse
         </ul>
         <!-- End List all schools -->
     </div>
@@ -56,7 +70,12 @@
     <div class="tct-members-list col-8">
 
         <div class="row justify-content-between">
-            <h3 class="col-8 tct-title-secondary">All Members</h3>
+            @if(isset($hasSelection) && isset($selectedSchool))
+                <h3 class="col-8 tct-title-secondary">Members Associated with: <span
+                        class="fw-normal fst-italic">{{ $selectedSchool }}</span></h3>
+            @else
+                <h3 class="col-8 tct-title-secondary">All Members</h3>
+            @endif
 
             <button type="button" class="col-2 mx-2 btn btn-sm btn-outline-secondary " data-bs-toggle="modal"
                     data-bs-target="#memberModal">Add Member
@@ -72,30 +91,30 @@
                 <th scope="col">#</th>
                 <th scope="col">Name</th>
                 <th scope="col">Email</th>
-                <th scope="col">School</th>
+                <th scope="col">School (s)</th>
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <th scope="row">1</th>
-                <td>Elie</td>
-                <td>elie@tct.com</td>
-                <td>TCT University</td>
-            </tr>
-            <tr>
-                <th scope="row">2</th>
-                <td>Marie</td>
-                <td>marie@tct.com</td>
-                <td>Girls College Inter</td>
-            </tr>
-            <tr>
-                <th scope="row">3</th>
-                <td>Luc</td>
-                <td>luc@tct.com</td>
-                <td>Cambridge School</td>
-            </tr>
+            @forelse($members as $index => $member)
+                <tr>
+                    <th scope="row">{{ $index + 1 }}</th>
+                    <td>{{ $member->name }}</td>
+                    <td>{{ $member->email }}</td>
+                    <td>
+                        <ol class="list-group list-group-flush list-group-numbered">
+                            @foreach($member->schools as $school)
+                                <li class="list-group-item border-0 fw-bold">{{ $school->name }}</li>
+                            @endforeach
+                        </ol>
+                    </td>
+                </tr>
+            @empty
+                <p>No Members</p>
+            @endforelse
             </tbody>
         </table>
+
+        {{ $members->links() }}
         <!-- End List all members -->
     </div>
 </div>
