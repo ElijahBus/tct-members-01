@@ -61,31 +61,32 @@
                 @endif
 
             @empty
-                <li>No Schools</li>
+                <span>{{"  "}}</span>
             @endforelse
         </ul>
         <!-- End List all schools -->
     </div>
 
-    <div class="tct-members-list col-8">
+    <div class="tct-members-list col-8 overflow-scroll">
 
         <div class="row justify-content-between">
             @if(isset($hasSelection) && isset($selectedSchool))
-                <h3 class="col-8 tct-title-secondary">Members Associated with: <span
-                        class="fw-normal fst-italic">{{ $selectedSchool }}</span></h3>
+                <h3 class="col-6 tct-title-secondary">Members Associated with:
+                    <span class="fw-normal fst-italic">{{ $selectedSchool }}</span>
+                </h3>
             @else
                 <h3 class="col-8 tct-title-secondary">All Members</h3>
             @endif
 
-            <button type="button" class="col-2 mx-2 btn btn-sm btn-outline-secondary " data-bs-toggle="modal"
-                    data-bs-target="#memberModal">Add Member
+            <button type="button" class="col-3 mx-2 btn btn-sm btn-outline-secondary h-25" data-bs-toggle="modal"
+                    data-bs-target="#memberModal" id="openMemberModal">Add Member
             </button>
             <!-- Include the modal with the form to add a new member -->
             @include('partials.add-member-modal')
         </div>
 
         <!-- List all members -->
-        <table class="table table-bordered mt-4">
+        <table class="table table-bordered table-responsive  mt-4">
             <thead>
             <tr>
                 <th scope="col">#</th>
@@ -119,5 +120,10 @@
     </div>
 </div>
 
+@if ($errors->any())
+    <script type="module">
+        document.getElementById('openMemberModal').click();
+    </script>
+@endif
 </body>
 </html>

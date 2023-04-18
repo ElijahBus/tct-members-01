@@ -10,7 +10,7 @@ class Member extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'email', 'school'];
+    protected $fillable = ['name', 'email'];
 
     public function schools(): BelongsToMany
     {

@@ -10,7 +10,9 @@ class HomeController extends Controller
 
     public function index()
     {
-        $members = Member::with('schools')->paginate(self::PAGINATION_LENGTH);
+        $members = Member::with('schools')
+            ->orderBy('id', 'desc')
+            ->paginate(self::PAGINATION_LENGTH);
 
         return view('welcome')->with([
             'members' => $members

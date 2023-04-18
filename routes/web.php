@@ -18,3 +18,4 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('/members/schools/{school}', [MemberController::class, 'showMembersBySchool'])->name('members.by-school');
+Route::post('/members', [MemberController::class, 'saveNewMember'])->name('members.save');
